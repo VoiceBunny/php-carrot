@@ -26,6 +26,47 @@ class VoiceBunnyCarrot {
 	$data = $this->request('genderAndAges', 'get', false);
 	return json_decode($data[1], true);
     }
+    
+    public function all_projects(){
+	$data = $this->request('projects', 'get');
+	return json_decode($data[1], true);
+    }
+    
+    public function get_project($id){
+	$data = $this->request('projects/'.$id, 'get');
+	return json_decode($data[1], true);
+    }
+    
+    public function create_project($project){
+	$data = $this->request('projects/add', 'post', true, $project);
+	return json_decode($data[1], true);
+    }
+    
+    public function force_dispose($id){
+	$data = $this->request('projects/forceDispose/'.$id, 'get');
+	return json_decode($data[1], true);
+    }
+    
+    public function quote($script, $contest=0 ,$maxEntries=3){
+	$vars  = array('script'=>$script, 'contest'=>$contest, 'maxContestEntries'=>$maxEntries);
+	$data = $this->request('projects/quote', 'post', true, $vars);
+	return json_decode($data[1], true);
+    }
+    
+    public function get_read($id){
+	$data = $this->request('reads/'.$id, 'get');
+	return json_decode($data[1], true);
+    }
+    
+     public function approve_read($id){
+	$data = $this->request('reads/approve/'.$id, 'get');
+	return json_decode($data[1], true);
+    }
+    
+     public function reject_read($id){
+	$data = $this->request('reads/approve/'.$id, 'get');
+	return json_decode($data[1], true);
+    }
 
     public function request($url, $method = 'post', $auth = true, $vars = array()) {
 
