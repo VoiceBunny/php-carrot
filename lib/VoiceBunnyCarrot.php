@@ -38,7 +38,12 @@ class VoiceBunnyCarrot {
     }
     
     public function create_project($project){
-	$data = $this->request('projects/add', 'post', true, $project);
+	$data = $this->request('projects/addSpeedy', 'post', true, $project);
+	return json_decode($data[1], true);
+    }
+    
+    public function create_booking_project($project){
+	$data = $this->request('projects/addBooking', 'post', true, $project);
 	return json_decode($data[1], true);
     }
     
@@ -47,8 +52,27 @@ class VoiceBunnyCarrot {
 	return json_decode($data[1], true);
     }
     
-    public function quote($script, $contest=0 ,$maxEntries=3){
-	$vars  = array('script'=>$script, 'contest'=>$contest, 'maxContestEntries'=>$maxEntries);
+    public function quote($params){
+        $vars = array();
+        $vars['language'] = $params['language'];
+        if(isset($params['fulfilmentType'])){
+            $vars['fulfilmentType'] = $params['fulfilmentType'];
+        }
+        if(isset($params['maxEntries'])){
+            $vars['maxEntries'] = $params['maxEntries'];
+        }
+        if(isset($params['talentID'])){
+            $vars['talentID'] = $params['talentID'];
+        }
+        
+        if(isset($params['numberOfCharacters'])){
+            $vars['numberOfCharacters'] = $params['numberOfCharacters'];
+        }else if(isset($params['numberOfWords'])){
+            $vars['numberOfWords'] = $params['numberOfWords'];
+        }else{
+            $vars['script'] = $params['script'];
+        }
+        
 	$data = $this->request('projects/quote', 'post', true, $vars);
 	return json_decode($data[1], true);
     }
@@ -67,6 +91,36 @@ class VoiceBunnyCarrot {
 	$data = $this->request('reads/approve/'.$id, 'get');
 	return json_decode($data[1], true);
     }
+    
+    public function revision_quote($id, $params){
+        $vars = array();
+        $vars['voiceBunnyError'] = $params['voiceBunnyError'];
+        if(isset($params['charactersAddedOrChanged'])){
+            $vars['charactersAddedOrChanged'] = $params['charactersAddedOrChanged'];
+        }else{
+            $vars['wordsAddedOrChanged'] = $params['wordsAddedOrChanged'];
+        }
+        $data = $this->request('reads/'.$id.'/revision/quote', 'post', true, $vars);
+	return json_decode($data[1], true);
+    }
+    
+    public function revision_add($id, $params){
+        $vars = array();
+        $vars['voiceBunnyError'] = $params['voiceBunnyError'];
+        $vars['instructions'] = $params['instructions'];
+        if(isset($params['ping'])){
+            $vars['ping'] = $params['ping'];
+        }
+        
+        if(isset($params['charactersAddedOrChanged'])){
+            $vars['charactersAddedOrChanged'] = $params['charactersAddedOrChanged'];
+        }else{
+            $vars['wordsAddedOrChanged'] = $params['wordsAddedOrChanged'];
+        }
+        $data = $this->request('reads/'.$id.'/revision/add', 'post', true, $vars);
+	return json_decode($data[1], true);
+    }
+
 
     public function request($url, $method = 'post', $auth = true, $vars = array()) {
 
