@@ -5,38 +5,35 @@
 
 require_once('lib/VoiceBunnyCarrot.php');
 
-$vb_carrot = new VoiceBunnyCarrot('0', 'xxxxXXXXxxxxXXXX','https://api.local.voicebunny.com/');
+$vb_carrot = new VoiceBunnyCarrot( '0', 'xxxxXXXXxxxxXXXX','https://api.local.voicebunny.com/');
 
 $balance = $vb_carrot->balance();
 echo "Your account balance is: ". $balance['balance']['amount'] ." ". $balance['balance']['currency']."<br>";
 
 $current_balance = $balance['balance']['amount'];
 
-$title = "My test project";
-$script = array();
-$script['Part001'] = "What's up, folks";
-$script['Part002'] = "What's up, doc";
-$language = "eng-us";
+$wordsToChange = 5;
+$readId = 75;
+$voiceBunnyError = 1;
+$instructions = 'Please correct the 4th word.';
 
 $quoteParams = array(
-    'script'=> $script, 
-    'language'=>$language,
+    'wordsAddedOrChanged'=> $wordsToChange, 
+    'voiceBunnyError'=>$voiceBunnyError,
 );
 
-
-$quote = $vb_carrot->quote($quoteParams);
-echo "Posting this project will cost: ". $quote['quote']['price']." ". $quote['quote']['currency']."<br>";
+$quote = $vb_carrot->revision_quote($readId, $quoteParams);
+echo "Posting this revision will cost: ". $quote['quote']['price']." ". $quote['quote']['currency']."<br>";
 
 $reward = $quote['quote']['price'];
 
 if( $current_balance >= $reward ){
-    $project = array(
-        "title" => $title,
-        "script" => $script,
-        "remarks" => "I want the voice be similar to Bugs Bunny.",
-        "price" => $reward
+    $revision = array(
+        'wordsAddedOrChanged' => $wordsToChange,
+        'voiceBunnyError' => $voiceBunnyError,
+        'instructions' => $instructions
     );
-    $response = $vb_carrot->create_project($project);
+    $response = $vb_carrot->revision_add($readId, $revision);
     if(isset($response['error'])){
         echo "Something happened: " . $response['error']['message'];
     }else{

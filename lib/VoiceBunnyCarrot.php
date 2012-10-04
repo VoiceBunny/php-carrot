@@ -1,4 +1,7 @@
 <?php
+# Authors::   Jorge Vargas  (mailto:jorge.vargas@voicebunny.com), Carlos Rodriguez (mailto:carlos.rodriguez@voicebunny.com)
+# Copyright:: Copyright (c) 2008 Torrenegra IP, LLC.
+# License::   Distributed under Creative Commons CC-BY license http://creativecommons.org/licenses/by/3.0/
 
 class VoiceBunnyCarrot {
 
@@ -38,11 +41,13 @@ class VoiceBunnyCarrot {
     }
     
     public function create_project($project){
+        $project['script'] = json_encode($project['script']);
 	$data = $this->request('projects/addSpeedy', 'post', true, $project);
 	return json_decode($data[1], true);
     }
     
     public function create_booking_project($project){
+        $project['script'] = json_encode($project['script']);
 	$data = $this->request('projects/addBooking', 'post', true, $project);
 	return json_decode($data[1], true);
     }

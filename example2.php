@@ -17,15 +17,16 @@ $script = array();
 $script['Part001'] = "What's up, folks";
 $script['Part002'] = "What's up, doc";
 $language = "eng-us";
+$talentId = 6;
 
 $quoteParams = array(
     'script'=> $script, 
     'language'=>$language,
+    'fulfilmentType' => 'booking',
+    'talentID' => $talentId
 );
-
-
 $quote = $vb_carrot->quote($quoteParams);
-echo "Posting this project will cost: ". $quote['quote']['price']." ". $quote['quote']['currency']."<br>";
+echo "Posting this booking will cost: ". $quote['quote']['price']." ". $quote['quote']['currency']."<br>";
 
 $reward = $quote['quote']['price'];
 
@@ -34,9 +35,9 @@ if( $current_balance >= $reward ){
         "title" => $title,
         "script" => $script,
         "remarks" => "I want the voice be similar to Bugs Bunny.",
-        "price" => $reward
+        "talentID" => $talentId
     );
-    $response = $vb_carrot->create_project($project);
+    $response = $vb_carrot->create_booking_project($project);
     if(isset($response['error'])){
         echo "Something happened: " . $response['error']['message'];
     }else{
