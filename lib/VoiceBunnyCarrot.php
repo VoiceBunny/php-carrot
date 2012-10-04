@@ -41,13 +41,17 @@ class VoiceBunnyCarrot {
     }
     
     public function create_project($project){
-        $project['script'] = json_encode($project['script']);
+        if(is_array($project['script'])){
+            $project['script'] = json_encode($project['script']);
+        }
 	$data = $this->request('projects/addSpeedy', 'post', true, $project);
 	return json_decode($data[1], true);
     }
     
     public function create_booking_project($project){
-        $project['script'] = json_encode($project['script']);
+       if(is_array($project['script'])){
+            $project['script'] = json_encode($project['script']);
+        }
 	$data = $this->request('projects/addBooking', 'post', true, $project);
 	return json_decode($data[1], true);
     }

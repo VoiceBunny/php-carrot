@@ -20,7 +20,7 @@ echo response['genderandages'];
 # Post project
 $project= array(
     'script' => "Test project",
-    'specialInstructions' => "Posted from Ruby-Carrot",
+    'remarks' => "Posted from Ruby-Carrot",
     'title' => "Test Project" 
 );
 $response = $vb_carrot->create_project(project);
